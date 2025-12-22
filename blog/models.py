@@ -56,7 +56,7 @@ class Location(TimeStampedModel, PublishableModel):
 
     class Meta:
         verbose_name = 'местоположение'
-        verbose_name_plural = 'Местоположения'
+        verbose_name_plural = 'Местоположение'
 
     def __str__(self):
         return self.name
@@ -72,7 +72,7 @@ class Post(TimeStampedModel, PublishableModel):
         'Дата и время публикации',
         help_text=(
             'Если установить дату и время в будущем — '
-            'можно делать отложенные публикации.'
+            'то можно делать отложенные публикации.'
         )
     )
     author = models.ForeignKey(
@@ -125,7 +125,7 @@ class Comment(models.Model):
 
     class Meta:
         verbose_name = 'комментарий'
-        verbose_name_plural = 'Комментарии'
+        verbose_name_plural = 'Комментарий'
         ordering = ('-created_at',)
 
     def __str__(self):

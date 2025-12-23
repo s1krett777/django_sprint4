@@ -11,16 +11,7 @@ class BasePostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = (
-            'title',
-            'text',
-            'pub_date',
-            'author',
-            'category',
-            'location',
-            'is_published',
-            'image',
-        )
+        exclude = ('author',)  # исключаем автора
 
     def clean_pub_date(self):
         return self.cleaned_data.get('pub_date')
@@ -33,7 +24,7 @@ class PostForm(BasePostForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ['text']
+        fields = ('text',)
 
 
 class UserForm(forms.ModelForm):

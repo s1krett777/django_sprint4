@@ -41,20 +41,13 @@ post_patterns = [
 
 
 urlpatterns = [
-    # Главная
     path('', views.PostListView.as_view(), name='index'),
-
-    # Посты
     path('posts/', include((post_patterns, app_name))),
-
-    # Категории
     path(
         'category/<slug:category_slug>/',
         views.CategoryPostListView.as_view(),
         name='category_posts'
     ),
-
-    # Профиль
     path(
         'profile/edit/',
         views.EditProfileView.as_view(),
@@ -65,15 +58,11 @@ urlpatterns = [
         views.ProfileView.as_view(),
         name='profile'
     ),
-
-    # Создание поста
     path(
         'create/',
         views.PostCreateView.as_view(),
         name='create_post'
     ),
-
-    # Смена пароля
     path(
         'profile/password_change/',
         auth_views.PasswordChangeView.as_view(

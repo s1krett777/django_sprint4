@@ -129,7 +129,7 @@ class CategoryPostListView(ListView):
         return get_posts_with_comments(
             queryset=base_qs,
             user=self.request.user,
-            filter_published=True,
+            filter_published = True,
             additional_filters=Q(category=self.category)
         )
 
@@ -194,34 +194,33 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             kwargs={'post_id': self.object.post.pk}
         )
 
-
-class ProfileView(DetailView):
+class ProfileView(DetailView): 
     model = User
     template_name = 'blog/profile.html'
+    context_object_name = 'profile'
     slug_field = 'username'
     slug_url_kwarg = 'username'
-    context_object_name = 'profile'
-
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        profile_user = self.object
-        now = timezone.now()
+        user = self.request.user
 
-        if self.request.user == profile_user:
-            posts_qs = Post.objects.filter(author=profile_user)
-        else:
-            posts_qs = Post.objects.filter(
-                author=profile_user,
-                is_published=True,
-                category__is_published=True,
-                pub_date__lte=now
-            )
+        base_queryset = Post.objects.filter(author=self.object)
+        filter_published = (user != self.object)
 
-        from django.core.paginator import Paginator
-        paginator = Paginator(posts_qs.order_by('-pub_date'), 10)
-        context['page_obj'] = paginator.get_page(
-            self.request.GET.get('page')
+        posts = get_posts_with_comments(
+            queryset=base_queryset,
+            user=user if filter_published else None,
+            filter_published=filter_published
         )
+
+        page_obj = get_paginated_page(
+            objects=posts.order_by('-pub_date'),
+            request=self.request,
+            per_page=10
+        )
+        
+        context['page_obj'] = page_obj
         return context
 
 

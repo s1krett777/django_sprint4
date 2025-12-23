@@ -11,7 +11,7 @@ class BasePostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        exclude = ('author',)  # исключаем автора
+        exclude = ('author',)
 
     def clean_pub_date(self):
         return self.cleaned_data.get('pub_date')
